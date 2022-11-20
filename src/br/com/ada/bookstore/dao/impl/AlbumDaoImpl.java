@@ -9,6 +9,8 @@ import br.com.ada.bookstore.model.Album;
 public class AlbumDaoImpl extends AbstractGenericDao<Album, Long> implements AlbumDao {
     @Override
     public AbstractDatabase getAbstractDatabase() {
-        return Database.getInstance();
+        Database database = Database.getInstance();
+        database.setEntityClass(Album.class);
+        return database;
     }
 }

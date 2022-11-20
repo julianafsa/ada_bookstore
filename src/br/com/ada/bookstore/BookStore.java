@@ -1,9 +1,17 @@
 package br.com.ada.bookstore;
 
 import br.com.ada.bookstore.dao.impl.AlbumDaoImpl;
+import br.com.ada.bookstore.dao.impl.BookDaoImpl;
+import br.com.ada.bookstore.dao.impl.ProductDaoImpl;
 import br.com.ada.bookstore.model.Album;
+import br.com.ada.bookstore.model.Book;
+import br.com.ada.bookstore.model.Product;
 import br.com.ada.bookstore.service.AlbumService;
+import br.com.ada.bookstore.service.BookService;
+import br.com.ada.bookstore.service.ProductService;
 import br.com.ada.bookstore.service.impl.AlbumServiceImpl;
+import br.com.ada.bookstore.service.impl.BookServiceImpl;
+import br.com.ada.bookstore.service.impl.ProductServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -46,7 +54,7 @@ public class BookStore {
 //        list.stream().forEach(System.out::println);
 
         // BOOK
-        /*Book book1 = new Book("Dom Casmurro", new BigDecimal("30"));
+        Book book1 = new Book("Dom Casmurro", new BigDecimal("30"));
         Book book2 = new Book("Iracema", new BigDecimal("25"));
         System.out.println("\n=== SAVE BOOK ===");
         BookService bookService = new BookServiceImpl(new BookDaoImpl());
@@ -54,11 +62,16 @@ public class BookStore {
         bookService.save(book2);
 
         System.out.println("\n=== SEARCHING ALL ===");
-        List<Book> list2 = bookService.findAll();
-        list2.stream().forEach(System.out::println);
+        List<Book> bookList = bookService.findAll();
+        bookList.stream().forEach(System.out::println);
+
+        System.out.println("\n=== SEARCHING ALL PRODUCTS ===");
+        ProductService productService = new ProductServiceImpl(new ProductDaoImpl());
+        List<Product> allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
 
         // GAME
-        Game game1 = new Game("Warcraft", new BigDecimal("300"));
+      /*  Game game1 = new Game("Warcraft", new BigDecimal("300"));
         Game game2 = new Game("Fifa 2022", new BigDecimal("400"));
         GameService gameService = new GameServiceImpl(new GameDaoImpl());
         gameService.save(game1);

@@ -8,4 +8,7 @@ public interface AbstractDatabase<T, K> {
     T findById(K id);
     List<T> findAll();
     void remove(K id);
+
+    void setEntityClass(Class entityClass);
+    Class getEntityClass();
 }

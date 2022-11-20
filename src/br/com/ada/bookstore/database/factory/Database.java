@@ -12,6 +12,7 @@ public class Database implements AbstractDatabase<Product, Long> {
     private static Database instance;
     private final List<Product> list;
     private static Long id = 0L;
+    private Class entityClass;
 
     private Database() {
         list = new ArrayList<>();
@@ -49,7 +50,15 @@ public class Database implements AbstractDatabase<Product, Long> {
     }
 
     public List<Product> findAll() {
-        return Collections.unmodifiableList(list);
+        //return Collections.unmodifiableList(list);
+        List<Product> filteredList = new ArrayList<>();
+        for (Product item: list) {
+            if (item.getClass() == this.getEntityClass() ||
+                    item.getClass().getSuperclass() == this.getEntityClass()) {
+                filteredList.add(item);
+            }
+        }
+        return Collections.unmodifiableList(filteredList);
     }
 
     public void remove(Long id) {
@@ -57,6 +66,16 @@ public class Database implements AbstractDatabase<Product, Long> {
         if (foundedItem != null) {
             list.remove(foundedItem);
         }
+    }
+
+    @Override
+    public void setEntityClass(Class currentClass) {
+        this.entityClass = currentClass;
+    }
+
+    @Override
+    public Class getEntityClass() {
+        return entityClass;
     }
 
 }
