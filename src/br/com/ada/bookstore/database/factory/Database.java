@@ -1,15 +1,16 @@
 package br.com.ada.bookstore.database.factory;
 
+import br.com.ada.bookstore.database.AbstractDatabase;
 import br.com.ada.bookstore.model.Product;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Database {
+public class Database implements AbstractDatabase<Product, Long> {
 
     private static Database instance;
-    private List<Product> list;
+    private final List<Product> list;
     private static Long id = 0L;
 
     private Database() {
@@ -31,45 +32,31 @@ public class Database {
     public void update(Product entity) {
         Product foundedItem = this.findById(entity.getId());
         if (foundedItem != null) {
-            foundedItem = entity;
+            int index = list.indexOf(foundedItem);
+            list.add(index, entity);
+            list.remove(index+1);
         }
     }
 
-    /*public Product findById(Long id) {
+    public Product findById(Long id) {
         Product foundedItem = null;
         for (Product item: list) {
-            if (item.getId() == id) {
+            if (item.getId().equals(id)) {
                 foundedItem = item;
             }
         }
         return foundedItem;
-    }*/
-    public <T, K> T findById(K id) {
-        Product foundedItem = null;
-        for (Product item: list) {
-            if (item.getId() == id) {
-                foundedItem = item;
-            }
-        }
-        return (T) foundedItem;
     }
 
     public List<Product> findAll() {
         return Collections.unmodifiableList(list);
     }
 
-    /*public void remove(Long id) {
-        Product foundedItem = this.findById(id);
-        if (foundedItem != null) {
-            list.remove(foundedItem);
-        }
-    }*/
-
-    public <K> void remove(K id) {
+    public void remove(Long id) {
         Product foundedItem = this.findById(id);
         if (foundedItem != null) {
             list.remove(foundedItem);
         }
     }
-    
+
 }

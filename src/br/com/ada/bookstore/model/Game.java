@@ -34,4 +34,14 @@ public class Game extends Product {
     public void setStudio(String studio) {
         this.studio = studio;
     }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                super.toString() +
+                ", distributor='" + distributor + '\'' +
+                ", genre='" + genre + '\'' +
+                ", studio='" + studio + '\'' +
+                '}';
+    }
 }

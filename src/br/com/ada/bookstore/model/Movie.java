@@ -53,4 +53,16 @@ public class Movie extends Product {
     public void setProducers(List<String> producers) {
         this.producers = producers;
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                super.toString() +
+                ", studio='" + studio + '\'' +
+                ", directors=" + directors +
+                ", distributor='" + distributor + '\'' +
+                ", genres=" + genres +
+                ", producers=" + producers +
+                '}';
+    }
 }

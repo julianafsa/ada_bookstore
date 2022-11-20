@@ -35,4 +35,15 @@ public class Album extends Product {
     public void setSeals(List<String> seals) {
         this.seals = seals;
     }
+
+    @Override
+    public String toString() {
+        return "Album{" +
+                super.toString() +
+                ", players=" + players +
+                ", genres=" + genres +
+                ", seals=" + seals +
+                '}';
+    }
+
 }
