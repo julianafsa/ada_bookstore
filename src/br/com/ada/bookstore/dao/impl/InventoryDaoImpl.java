@@ -5,6 +5,9 @@ import br.com.ada.bookstore.dao.InventoryDao;
 import br.com.ada.bookstore.database.AbstractDatabase;
 import br.com.ada.bookstore.database.InventoryDatabase;
 import br.com.ada.bookstore.model.Inventory;
+import br.com.ada.bookstore.model.enumerations.Category;
+
+import java.util.List;
 
 public class InventoryDaoImpl extends AbstractGenericDao<Inventory, Long> implements InventoryDao {
     @Override
@@ -14,8 +17,9 @@ public class InventoryDaoImpl extends AbstractGenericDao<Inventory, Long> implem
         return database;
     }
 
-//    @Override
-//    public List<Inventory> findByCategory(Category category) {
-//        return null;
-//    }
+    @Override
+    public List<Inventory> findByCategory(Category category) {
+        InventoryDatabase database = InventoryDatabase.getInstance();
+        return database.findByCategory(category);
+    }
 }

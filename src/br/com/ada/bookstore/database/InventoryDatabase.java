@@ -119,7 +119,7 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
     }
 
     public List<Inventory> findByCategory(Category category) {
-        List<Inventory> inventories = map.get(category);
+        final List<Inventory> inventories = map.get(category);
         return Collections.unmodifiableList(inventories);
     }
 

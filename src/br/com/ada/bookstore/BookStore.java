@@ -2,6 +2,7 @@ package br.com.ada.bookstore;
 
 import br.com.ada.bookstore.dao.impl.*;
 import br.com.ada.bookstore.model.*;
+import br.com.ada.bookstore.model.enumerations.Category;
 import br.com.ada.bookstore.service.*;
 import br.com.ada.bookstore.service.impl.*;
 
@@ -130,22 +131,33 @@ public class BookStore {
         System.out.println("\n=== ADDING INVENTORY ===");
         InventoryService inventoryService = new InventoryServiceImpl(new InventoryDaoImpl());
         inventoryService.update(new Inventory(album1, 5));
-        inventoryService.update(new Inventory(album2, 5));
+        inventoryService.update(new Inventory(album2, 6));
         inventoryService.update(new Inventory(book1, 10));
-        inventoryService.update(new Inventory(book2, 10));
-        inventoryService.update(new Inventory(book3, 10));
+        inventoryService.update(new Inventory(book2, 11));
+        inventoryService.update(new Inventory(book3, 12));
         inventoryService.update(new Inventory(game1, 20));
-        inventoryService.update(new Inventory(game2, 20));
+        inventoryService.update(new Inventory(game2, 21));
         inventoryService.update(new Inventory(movie1, 30));
-        inventoryService.update(new Inventory(movie1, 30));
+        inventoryService.update(new Inventory(movie1, 31));
         inventoryService.update(new Inventory(toy1, 40));
-        inventoryService.update(new Inventory(toy2, 40));
+        inventoryService.update(new Inventory(toy2, 41));
+
+        // SEARCHING SPECIFIC PRODUCT AT INVENTORY
+        System.out.println("\n=== SEARCHING SPECIFIC PRODUCT AT INVENTORY ===");
+        final Inventory specificProductInventory = inventoryService.findById(6L);
+        System.out.println(specificProductInventory.toString());
 
         // COMPLETE LIST AT INVENTORY
         System.out.println("\n=== SEARCHING ALL PRODUCTS AT INVENTORY ===");
         final List<Inventory> allInventory = inventoryService.findAll();
         System.out.println("");
         allInventory.stream().forEach(System.out::println);
+
+        // SEARCHING PRODUCTS BY CATEGORY AT INVENTORY
+        System.out.println("\n=== SEARCHING PRODUCTS BY CATEGORY AT INVENTORY ===");
+        final List<Inventory> inventoryByCategory = inventoryService.findByCategory(Category.BOOK);
+        System.out.println("");
+        inventoryByCategory.stream().forEach(System.out::println);
 
     }
 }

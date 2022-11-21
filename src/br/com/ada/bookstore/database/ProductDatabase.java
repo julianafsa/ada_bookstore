@@ -49,7 +49,6 @@ public class ProductDatabase implements AbstractDatabase<Product, Long> {
     }
 
     public List<Product> findAll() {
-        //return Collections.unmodifiableList(list);
         List<Product> filteredList = new ArrayList<>();
         for (Product item: list) {
             if (item.getClass() == this.getEntityClass() ||
