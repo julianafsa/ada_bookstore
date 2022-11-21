@@ -13,4 +13,9 @@ public class InventoryDaoImpl extends AbstractGenericDao<Inventory, Long> implem
         database.setEntityClass(Inventory.class);
         return database;
     }
+
+//    @Override
+//    public List<Inventory> findByCategory(Category category) {
+//        return null;
+//    }
 }

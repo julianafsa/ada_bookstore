@@ -1,16 +1,16 @@
 package br.com.ada.bookstore.model;
 
 public class Inventory {
-    private Long productId;
+    private Product product;
     private Integer amount;
 
-    public Inventory(Long product, Integer amount) {
-        this.productId = product;
+    public Inventory(Product product, Integer amount) {
+        this.product = product;
         this.amount = amount;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
     public Integer getAmount() {
@@ -32,7 +32,7 @@ public class Inventory {
     @Override
     public String toString() {
         return "Inventory{" +
-                "productId=" + productId +
+                "product=" + product +
                 ", amount=" + amount +
                 '}';
     }

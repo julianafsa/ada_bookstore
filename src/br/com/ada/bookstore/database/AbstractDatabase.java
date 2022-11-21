@@ -9,6 +9,6 @@ public interface AbstractDatabase<T, K> {
     List<T> findAll();
     void remove(K id);
 
-    void setEntityClass(Class entityClass);
-    Class getEntityClass();
+    void setEntityClass(Class<?> entityClass);
+    Class<?> getEntityClass();
 }

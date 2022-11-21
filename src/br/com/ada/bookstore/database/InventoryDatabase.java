@@ -1,19 +1,15 @@
 package br.com.ada.bookstore.database;
 
-import br.com.ada.bookstore.dao.impl.ProductDaoImpl;
 import br.com.ada.bookstore.model.Inventory;
 import br.com.ada.bookstore.model.Product;
 import br.com.ada.bookstore.model.enumerations.Category;
-import br.com.ada.bookstore.service.ProductService;
-import br.com.ada.bookstore.service.impl.ProductServiceImpl;
 
 import java.util.*;
 
 public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
     private static InventoryDatabase instance;
     private final Map<Category, List<Inventory>> map;
-    private Class entityClass;
-    private final ProductService productService;
+    private Class<?> entityClass;
 
     private InventoryDatabase() {
         map = new HashMap<>();
@@ -21,7 +17,6 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
         for (Category category: categories) {
             map.put(category, new ArrayList<>());
         }
-        productService = new ProductServiceImpl(new ProductDaoImpl());
     }
 
     public static InventoryDatabase getInstance () {
@@ -33,19 +28,18 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
 
     @Override
     public void save(Inventory entity) {
-        Long productId = entity.getProductId();
-        Product foundedProduct = productService.findById(productId);
-        if (foundedProduct != null) {
-            String categoryName = foundedProduct.getClass().getSimpleName();
+        Product product = entity.getProduct();
+        if (product != null) {
+            String categoryName = product.getClass().getSimpleName();
             Category category = Category.fromName(categoryName);
             List<Inventory> list = map.get(category);
-            Inventory inventory =
-                    list.stream().filter(i -> Objects.equals(foundedProduct.getId(),
-                            i.getProductId())).findFirst().orElse(null);
+            Inventory inventory = list.stream().filter(i -> Objects.equals(product.getId(),
+                    i.getProduct().getId())).findFirst().orElse(null);
             if (inventory != null) {
                 inventory.addAmount(entity.getAmount());
             } else {
                 List<Inventory> actualList = map.get(category);
+                inventory = new Inventory(product, 0);
                 actualList.add(inventory);
                 map.put(category, actualList);
             }
@@ -54,19 +48,19 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
 
     @Override
     public void update(Inventory entity) {
-        Long productId = entity.getProductId();
-        Product foundedProduct = productService.findById(productId);
-        if (foundedProduct != null) {
-            String categoryName = foundedProduct.getClass().getSimpleName();
+        Product product = entity.getProduct();
+        if (product != null) {
+            String categoryName = product.getClass().getSimpleName();
             Category category = Category.fromName(categoryName);
             List<Inventory> list = map.get(category);
             Inventory inventory =
-                    list.stream().filter(i -> Objects.equals(foundedProduct.getId(),
-                            i.getProductId())).findFirst().orElse(null);
+                    list.stream().filter(i -> Objects.equals(product.getId(),
+                            i.getProduct().getId())).findFirst().orElse(null);
             if (inventory != null) {
                 inventory.setAmount(entity.getAmount());
             } else {
                 List<Inventory> actualList = new ArrayList<>();
+                inventory = new Inventory(product, 0);
                 actualList.add(inventory);
                 map.put(category, actualList);
             }
@@ -76,13 +70,12 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
     @Override
     public Inventory findById(Long id) {
         Inventory inventory = null;
-        Product foundedProduct = productService.findById(id);
-        if (foundedProduct != null) {
-            String categoryName = foundedProduct.getClass().getSimpleName();
-            Category category = Category.fromName(categoryName);
-            List<Inventory> list = map.get(category);
-            inventory = list.stream().filter(i -> Objects.equals(foundedProduct.getId(),
-                    i.getProductId())).findFirst().orElse(null);
+        List<Inventory> list = this.findAll();
+        for (Inventory inv : list) {
+            Product product = inv.getProduct();
+            if (product.getId().equals(id)) {
+                inventory = inv;
+            }
         }
         return inventory;
     }
@@ -98,16 +91,17 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
 
     @Override
     public void remove(Long id) {
-        Product foundedProduct = productService.findById(id);
+        Inventory inventory = this.findById(id);
+        Product foundedProduct = (inventory != null ? inventory.getProduct() : null);
         if (foundedProduct != null) {
             String categoryName = foundedProduct.getClass().getSimpleName();
             Category category = Category.fromName(categoryName);
             List<Inventory> list = map.get(category);
-            Inventory inventory =
+            Inventory inv =
                     list.stream().filter(i -> Objects.equals(foundedProduct.getId(),
-                            i.getProductId())).findFirst().orElse(null);
-            if (inventory != null) {
-                list.remove(inventory);
+                            i.getProduct().getId())).findFirst().orElse(null);
+            if (inv != null) {
+                list.remove(inv);
                 map.remove(category);
                 map.put(category, list);
             }
@@ -115,13 +109,18 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
     }
 
     @Override
-    public void setEntityClass(Class entityClass) {
+    public void setEntityClass(Class<?> entityClass) {
         this.entityClass = entityClass;
     }
 
     @Override
-    public Class getEntityClass() {
+    public Class<?> getEntityClass() {
         return entityClass;
+    }
+
+    public List<Inventory> findByCategory(Category category) {
+        List<Inventory> inventories = map.get(category);
+        return Collections.unmodifiableList(inventories);
     }
 
 }
