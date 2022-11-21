@@ -1,17 +1,9 @@
 package br.com.ada.bookstore;
 
-import br.com.ada.bookstore.dao.impl.AlbumDaoImpl;
-import br.com.ada.bookstore.dao.impl.BookDaoImpl;
-import br.com.ada.bookstore.dao.impl.ProductDaoImpl;
-import br.com.ada.bookstore.model.Album;
-import br.com.ada.bookstore.model.Book;
-import br.com.ada.bookstore.model.Product;
-import br.com.ada.bookstore.service.AlbumService;
-import br.com.ada.bookstore.service.BookService;
-import br.com.ada.bookstore.service.ProductService;
-import br.com.ada.bookstore.service.impl.AlbumServiceImpl;
-import br.com.ada.bookstore.service.impl.BookServiceImpl;
-import br.com.ada.bookstore.service.impl.ProductServiceImpl;
+import br.com.ada.bookstore.dao.impl.*;
+import br.com.ada.bookstore.model.*;
+import br.com.ada.bookstore.service.*;
+import br.com.ada.bookstore.service.impl.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -61,35 +53,66 @@ public class BookStore {
         bookService.save(book1);
         bookService.save(book2);
 
-        System.out.println("\n=== SEARCHING ALL ===");
-        List<Book> bookList = bookService.findAll();
-        bookList.stream().forEach(System.out::println);
+//        System.out.println("\n=== SEARCHING ALL ===");
+//        List<Book> bookList = bookService.findAll();
+//        bookList.stream().forEach(System.out::println);
 
         System.out.println("\n=== SEARCHING ALL PRODUCTS ===");
         ProductService productService = new ProductServiceImpl(new ProductDaoImpl());
         List<Product> allList = productService.findAll();
         allList.stream().forEach(System.out::println);
 
+        Product book3 = new Book("O Irmão Alemão", new BigDecimal("15"));
+        productService.save(book3);
+        allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
+
         // GAME
-      /*  Game game1 = new Game("Warcraft", new BigDecimal("300"));
-        Game game2 = new Game("Fifa 2022", new BigDecimal("400"));
-        GameService gameService = new GameServiceImpl(new GameDaoImpl());
-        gameService.save(game1);
-        gameService.save(game2);
+        Product game1 = new Game("Warcraft", new BigDecimal("300"));
+        Product game2 = new Game("Fifa 2022", new BigDecimal("400"));
+        //GameService gameService = new GameServiceImpl(new GameDaoImpl());
+        productService.save(game1);
+        productService.save(game2);
+        allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
 
         // MOVIE
         Movie movie1 = new Movie("Rambo", new BigDecimal("10"));
         Movie movie2 = new Movie("O Predador", new BigDecimal("15"));
-        MovieService movieService = new MovieServiceImpl(new MovieDaoImpl());
-        movieService.save(movie1);
-        movieService.save(movie2);
+//        MovieService movieService = new MovieServiceImpl(new MovieDaoImpl());
+//        movieService.save(movie1);
+//        movieService.save(movie2);
+        productService.save(movie1);
+        productService.save(movie2);
+        System.out.println("");
+        allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
 
         // TOY
         Toy toy1 = new Toy("Bicicleta Caloi", new BigDecimal("250"));
         Toy toy2 = new Toy("PlayStation 5", new BigDecimal("500"));
-        ToyService toyService = new ToyServiceImpl(new ToyDaoImpl());
-        toyService.save(toy1);
-        toyService.save(toy2);*/
+//        ToyService toyService = new ToyServiceImpl(new ToyDaoImpl());
+//        toyService.save(toy1);
+//        toyService.save(toy2);
+        System.out.println("");
+        productService.save(toy1);
+        productService.save(toy2);
+        System.out.println("");
+        allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
+
+        Product foundedItem = productService.findById(7L);
+        System.out.println(foundedItem);
+
+        System.out.println("");
+        movie1.setProducers(Arrays.asList("Silverter Stalone"));
+        productService.update(movie1);
+        allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
+
+        productService.remove(5L);
+        allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
 
     }
 }

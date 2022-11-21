@@ -1,26 +1,25 @@
-package br.com.ada.bookstore.database.factory;
+package br.com.ada.bookstore.database;
 
-import br.com.ada.bookstore.database.AbstractDatabase;
 import br.com.ada.bookstore.model.Product;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Database implements AbstractDatabase<Product, Long> {
+public class ProductDatabase implements AbstractDatabase<Product, Long> {
 
-    private static Database instance;
+    private static ProductDatabase instance;
     private final List<Product> list;
     private static Long id = 0L;
     private Class entityClass;
 
-    private Database() {
+    private ProductDatabase() {
         list = new ArrayList<>();
     }
 
-    public static Database getInstance() {
+    public static ProductDatabase getInstance() {
         if (instance == null) {
-            instance = new Database();
+            instance = new ProductDatabase();
         }
         return instance;
     }
