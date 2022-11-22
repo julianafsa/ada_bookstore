@@ -37,6 +37,7 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
                     i.getProduct().getId())).findFirst().orElse(null);
             if (inventory != null) {
                 inventory.addAmount(entity.getAmount());
+                // TODO
             } else {
                 List<Inventory> actualList = map.get(category);
                 inventory = new Inventory(product, 0);
@@ -57,7 +58,7 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
                     list.stream().filter(i -> Objects.equals(product.getId(),
                             i.getProduct().getId())).findFirst().orElse(null);
             if (inventory != null) {
-                inventory.setAmount(entity.getAmount());
+                inventory.addAmount(entity.getAmount());
             } else {
                 List<Inventory> actualList = new ArrayList<>();
                 inventory = new Inventory(product, 0);
@@ -86,7 +87,7 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
         for (Map.Entry<Category, List<Inventory>> entry : map.entrySet()) {
             list.addAll(entry.getValue());
         }
-        return list;
+        return Collections.unmodifiableList(list);
     }
 
     @Override
@@ -123,4 +124,36 @@ public class InventoryDatabase implements AbstractDatabase<Inventory, Long> {
         return Collections.unmodifiableList(inventories);
     }
 
+    public void decreaseAmount(final Product product, final Integer amount) {
+        if (product != null) {
+            String categoryName = product.getClass().getSimpleName();
+            Category category = Category.fromName(categoryName);
+            List<Inventory> list = map.get(category);
+            Inventory inventory =
+                    list.stream().filter(i -> Objects.equals(product.getId(),
+                            i.getProduct().getId())).findFirst().orElse(null);
+            if (inventory != null) {
+                inventory.reduceAmount(amount);
+            } else {
+                // TODO throw an exception
+            }
+        }
+    }
+
+    public void increaseAmount(Product product, Integer amount) {
+        if (product != null && amount != null) {
+            String categoryName = product.getClass().getSimpleName();
+            Category category = Category.fromName(categoryName);
+            List<Inventory> list = map.get(category);
+            Inventory inventory =
+                    list.stream().filter(i -> Objects.equals(product.getId(),
+                            i.getProduct().getId())).findFirst().orElse(null);
+            if (inventory != null) {
+                inventory.addAmount(amount);
+            } else {
+                // TODO throw an exception
+            }
+        }
+
+    }
 }

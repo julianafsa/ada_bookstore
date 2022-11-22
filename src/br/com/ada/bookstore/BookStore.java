@@ -1,10 +1,16 @@
 package br.com.ada.bookstore;
 
-import br.com.ada.bookstore.dao.impl.*;
+import br.com.ada.bookstore.dao.impl.InventoryDaoImpl;
+import br.com.ada.bookstore.dao.impl.OrderDaoImpl;
+import br.com.ada.bookstore.dao.impl.ProductDaoImpl;
 import br.com.ada.bookstore.model.*;
 import br.com.ada.bookstore.model.enumerations.Category;
-import br.com.ada.bookstore.service.*;
-import br.com.ada.bookstore.service.impl.*;
+import br.com.ada.bookstore.service.InventoryService;
+import br.com.ada.bookstore.service.OrderService;
+import br.com.ada.bookstore.service.ProductService;
+import br.com.ada.bookstore.service.impl.InventoryServiceImpl;
+import br.com.ada.bookstore.service.impl.OrderServiceImpl;
+import br.com.ada.bookstore.service.impl.ProductServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -132,6 +138,7 @@ public class BookStore {
         InventoryService inventoryService = new InventoryServiceImpl(new InventoryDaoImpl());
         inventoryService.update(new Inventory(album1, 5));
         inventoryService.update(new Inventory(album2, 6));
+        inventoryService.update(new Inventory(album1, 10));
         inventoryService.update(new Inventory(book1, 10));
         inventoryService.update(new Inventory(book2, 11));
         inventoryService.update(new Inventory(book3, 12));
@@ -149,7 +156,7 @@ public class BookStore {
 
         // COMPLETE LIST AT INVENTORY
         System.out.println("\n=== SEARCHING ALL PRODUCTS AT INVENTORY ===");
-        final List<Inventory> allInventory = inventoryService.findAll();
+        List<Inventory> allInventory = inventoryService.findAll();
         System.out.println("");
         allInventory.stream().forEach(System.out::println);
 
@@ -158,6 +165,26 @@ public class BookStore {
         final List<Inventory> inventoryByCategory = inventoryService.findByCategory(Category.BOOK);
         System.out.println("");
         inventoryByCategory.stream().forEach(System.out::println);
+
+        // ORDER
+        System.out.println("\n============ ORDER ============");
+
+        // ADDING ORDER
+        System.out.println("\n=== ADDING ORDER ===");
+        OrderService orderService = new OrderServiceImpl(new OrderDaoImpl());
+        Item item = new Item(album1, 2);
+        Order order = new Order(Arrays.asList(item));
+        orderService.save(order);
+        allInventory = inventoryService.findAll();
+        System.out.println("");
+        allInventory.stream().forEach(System.out::println);
+
+        // REMOVING ORDER
+        System.out.println("\n=== REMOVING ORDER ===");
+        orderService.remove(order.getId());
+        allInventory = inventoryService.findAll();
+        System.out.println("");
+        allInventory.stream().forEach(System.out::println);
 
     }
 }
