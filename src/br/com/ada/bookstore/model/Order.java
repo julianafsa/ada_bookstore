@@ -1,13 +1,14 @@
 package br.com.ada.bookstore.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class Order {
     private Long id;
-    private List<Item> itens;
+    private List<Item> items;
 
     public Order(List<Item> itens) {
-        this.itens = itens;
+        this.items = itens;
     }
 
     public Long getId() {
@@ -19,22 +20,33 @@ public class Order {
     }
 
     public List<Item> getItens() {
-        return itens;
+        return items;
     }
 
     public void addItem(Item item) {
-        itens.add(item);
+        items.add(item);
     }
 
     public void removeItem(final Item item) {
-        itens.remove(item);
+        items.remove(item);
+    }
+
+    public BigDecimal getTotalOrderValue() {
+        BigDecimal totalOrderValue = BigDecimal.ZERO;
+        for (Item item: items) {
+            final BigDecimal itemValue = item.getProduct().getPrice();
+            final BigDecimal itemAmount = new BigDecimal(Integer.toString(item.getAmount()));
+            final BigDecimal totalPerItem = itemValue.multiply(itemAmount);
+            totalOrderValue = totalOrderValue.add(totalPerItem);
+        }
+        return totalOrderValue;
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", itens=" + itens +
+                ", itens=" + items +
                 '}';
     }
 }

@@ -1,10 +1,12 @@
 package br.com.ada.bookstore.service.impl;
 
 import br.com.ada.bookstore.dao.OrderDao;
+import br.com.ada.bookstore.dao.impl.CashManagerDaoImpl;
 import br.com.ada.bookstore.dao.impl.InventoryDaoImpl;
 import br.com.ada.bookstore.model.Item;
 import br.com.ada.bookstore.model.Order;
 import br.com.ada.bookstore.service.AbstractCrudServiceImpl;
+import br.com.ada.bookstore.service.CashManagerService;
 import br.com.ada.bookstore.service.InventoryService;
 import br.com.ada.bookstore.service.OrderService;
 
@@ -16,6 +18,7 @@ public class OrderServiceImpl extends AbstractCrudServiceImpl<Order, Long> imple
     }
 
     private InventoryService inventoryService = new InventoryServiceImpl(new InventoryDaoImpl());
+    private CashManagerService cashManagerService = new CashManagerServiceImpl(new CashManagerDaoImpl());
 
     @Override
     public void save(final Order entity) {
@@ -24,6 +27,7 @@ public class OrderServiceImpl extends AbstractCrudServiceImpl<Order, Long> imple
         for (Item item: items) {
             inventoryService.decreaseAmount(item.getProduct(), item.getAmount());
         }
+        cashManagerService.addBalance(entity.getTotalOrderValue());
     }
 
     @Override
@@ -36,10 +40,11 @@ public class OrderServiceImpl extends AbstractCrudServiceImpl<Order, Long> imple
     @Override
     public void remove(final Long id) {
         super.remove(id);
-        Order order = this.findById(id);
+        final Order order = this.findById(id);
         final List<Item> items = order.getItens();
         for (Item item: items) {
             inventoryService.increaseAmount(item.getProduct(), item.getAmount());
         }
+        cashManagerService.reduceBalance(order.getTotalOrderValue());
     }
 }

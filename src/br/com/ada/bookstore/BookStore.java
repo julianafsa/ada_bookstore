@@ -172,8 +172,9 @@ public class BookStore {
         // ADDING ORDER
         System.out.println("\n=== ADDING ORDER ===");
         OrderService orderService = new OrderServiceImpl(new OrderDaoImpl());
-        Item item = new Item(album1, 2);
-        Order order = new Order(Arrays.asList(item));
+        Item item1 = new Item(album1, 2);
+        Item item2 = new Item(album2, 3);
+        Order order = new Order(Arrays.asList(item1, item2));
         orderService.save(order);
         allInventory = inventoryService.findAll();
         System.out.println("");
