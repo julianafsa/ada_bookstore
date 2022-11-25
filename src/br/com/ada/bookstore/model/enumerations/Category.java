@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 public enum Category {
     ALBUM("Album"),
     BOOK("Book"),
+    ADULT_AUDIENCE_BOOK("AdultAudienceBook"),
     GAME("Game"),
     MOVIE("Movie"),
     TOY("Toy");

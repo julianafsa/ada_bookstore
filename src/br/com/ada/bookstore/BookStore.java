@@ -13,6 +13,7 @@ import br.com.ada.bookstore.service.impl.OrderServiceImpl;
 import br.com.ada.bookstore.service.impl.ProductServiceImpl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -183,6 +184,29 @@ public class BookStore {
         // REMOVING ORDER
         System.out.println("\n=== REMOVING ORDER ===");
         orderService.remove(order.getId());
+        allInventory = inventoryService.findAll();
+        System.out.println("");
+        allInventory.stream().forEach(System.out::println);
+
+        // ORDER
+        System.out.println("\n============ ORDER WITH CUSTOMER ============");
+
+        // ADDING ORDER
+        System.out.println("\n=== ADDING ORDER WITH CUSTOMER ===");
+        //OrderService orderService = new OrderServiceImpl(new OrderDaoImpl());
+        AdultAudienceBook adultAudienceProduct =
+                new AdultAudienceBook("Só para Adulto", new BigDecimal("30"));
+        productService.save(adultAudienceProduct);
+        allList = productService.findAll();
+        allList.stream().forEach(System.out::println);
+
+        Item item3 = new Item(adultAudienceProduct, 1);
+//        final SimpleDateFormat osgDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        final String birthdate = osgDateFormat.format(new Date("2000-01-01"));
+        Customer adultCustomer = new Customer(
+                "Adulto", "111", "22233344455", LocalDate.of(2000, 01, 01));
+        Order adultAudienceOrder = new AdultAudienceOrder(Arrays.asList(item3), adultCustomer);
+        orderService.save(order);
         allInventory = inventoryService.findAll();
         System.out.println("");
         allInventory.stream().forEach(System.out::println);
