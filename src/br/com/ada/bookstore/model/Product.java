@@ -2,14 +2,22 @@ package br.com.ada.bookstore.model;
 
 import java.math.BigDecimal;
 
-public abstract class Product {
+public abstract class Product implements AdultAudienceProduct {
     private Long id;
     private String name;
     private BigDecimal price;
+    private Boolean hasAdultAudience;
 
     public Product(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
+        this.hasAdultAudience = Boolean.FALSE;
+    }
+
+    public Product(String name, BigDecimal price, Boolean hasAdultAudience) {
+        this.name = name;
+        this.price = price;
+        this.hasAdultAudience = hasAdultAudience;
     }
 
     public Long getId() {
@@ -36,8 +44,22 @@ public abstract class Product {
         this.price = price;
     }
 
+    public Boolean hasAdultAudience() {
+        return hasAdultAudience;
+    }
+
+    @Override
+    public void setHasAdultAudience(Boolean hasAdultAudience) {
+        this.hasAdultAudience = hasAdultAudience;
+    }
+
     @Override
     public String toString() {
-        return "id=" + id + ", name='" + name + '\'' + ", price=" + price;
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", hasAdultAudience=" + hasAdultAudience +
+                '}';
     }
 }

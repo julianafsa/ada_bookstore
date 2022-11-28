@@ -1,14 +1,22 @@
 package br.com.ada.bookstore.model;
 
+import br.com.ada.bookstore.model.customer.Customer;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 public class Order {
     private Long id;
     private List<Item> items;
+    private Customer customer;
 
     public Order(List<Item> itens) {
         this.items = itens;
+    }
+
+    public Order(List<Item> itens, Customer customer) {
+        this.items = itens;
+        this.customer = customer;
     }
 
     public Long getId() {
@@ -29,6 +37,14 @@ public class Order {
 
     public void removeItem(final Item item) {
         items.remove(item);
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public BigDecimal getTotalOrderValue() {

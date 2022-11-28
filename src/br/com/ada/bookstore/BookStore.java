@@ -4,6 +4,7 @@ import br.com.ada.bookstore.dao.impl.InventoryDaoImpl;
 import br.com.ada.bookstore.dao.impl.OrderDaoImpl;
 import br.com.ada.bookstore.dao.impl.ProductDaoImpl;
 import br.com.ada.bookstore.model.*;
+import br.com.ada.bookstore.model.customer.Customer;
 import br.com.ada.bookstore.model.enumerations.Category;
 import br.com.ada.bookstore.service.InventoryService;
 import br.com.ada.bookstore.service.OrderService;
@@ -13,6 +14,7 @@ import br.com.ada.bookstore.service.impl.OrderServiceImpl;
 import br.com.ada.bookstore.service.impl.ProductServiceImpl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,7 +32,6 @@ public class BookStore {
 //        AlbumService albumService = new AlbumServiceImpl(new AlbumDaoImpl());
 //        albumService.save(album1);
 //        albumService.save(album2);
-
 
         /*System.out.println("\n=== UPDATING ALBUM ===");
         Album updatedAlbum1 = new Album("Physical Graffiti", new BigDecimal("60"));
@@ -186,6 +187,33 @@ public class BookStore {
         allInventory = inventoryService.findAll();
         System.out.println("");
         allInventory.stream().forEach(System.out::println);
+
+        // ORDER
+        System.out.println("\n============ ORDER WITH CUSTOMER ============");
+
+        // ADDING ORDER
+        System.out.println("\n=== ADDING ORDER WITH CUSTOMER ===");
+
+        Product adultAudienceBook = new Book("Só para Adultos", new BigDecimal("101"));
+        adultAudienceBook.setHasAdultAudience(Boolean.TRUE);
+        Product noAdultAudienceBook = new Book("Para a Família", new BigDecimal("50"));
+        productService.save(adultAudienceBook);
+        productService.save(noAdultAudienceBook);
+        inventoryService.update(new Inventory(adultAudienceBook, 2));
+        inventoryService.update(new Inventory(noAdultAudienceBook, 5));
+        //allList = productService.findAll();
+        //allList.stream().forEach(System.out::println);
+
+        Item item3 = new Item(adultAudienceBook, 1);
+        Item item4 = new Item(noAdultAudienceBook, 2);
+        Customer adultCustomer = new Customer(
+                "João Maria", "1111111111", "22233344455", LocalDate.of(2000, 01, 01));
+        Order adultAudienceOrder = new Order(Arrays.asList(item3, item4), adultCustomer);
+        orderService.save(adultAudienceOrder);
+        allInventory = inventoryService.findAll();
+        System.out.println("");
+        allInventory.stream().forEach(System.out::println);
+
 
     }
 }
